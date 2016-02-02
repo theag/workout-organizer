@@ -1,10 +1,13 @@
 package com.workouttracker;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,9 +23,11 @@ import com.workouttracker.data.WorkoutList;
 
 import java.text.SimpleDateFormat;
 
-public class ViewWorkoutExerciseActivity extends AppCompatActivity {
+public class ViewWorkoutExerciseActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, ExerciseHistoryGraphView.FlingListener {
 
     private int index;
+    private boolean isCurrent;
+    private GestureDetector mDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +41,18 @@ public class ViewWorkoutExerciseActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         index = extras.getInt(Workout.EXERCISE_INDEX);
+        isCurrent = extras.getBoolean(WorkoutAdapter.CURRENT_INDEX);
         Exercise ex = WorkoutList.current.getExercise(index);
 
         TextView tv = (TextView)findViewById(R.id.list_item_name);
         tv.setText(ex.name);
+        if(isCurrent) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                tv.setBackgroundColor(getColor(R.color.exercise_history_during_workout));
+            } else {
+                tv.setBackgroundColor(getResources().getColor(R.color.exercise_history_during_workout));
+            }
+        }
 
         tv = (TextView)findViewById(R.id.list_item_weight);
         tv.setText("" + ex.weight);
@@ -74,8 +87,11 @@ public class ViewWorkoutExerciseActivity extends AppCompatActivity {
             tl.addView(view);
         }
 
+        mDetector = new GestureDetector(this, this);
+
         ExerciseHistoryGraphView ehgv = (ExerciseHistoryGraphView)findViewById(R.id.image_history);
         ehgv.setExercise(ex);
+        ehgv.setFlingListener(this);
     }
 
     @Override
@@ -134,4 +150,40 @@ public class ViewWorkoutExerciseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mDetector.onTouchEvent(event);
+        return true;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        System.out.println(e1.getX() +" " +e1.getY() +" -> " +e2.getX() +" " +e2.getY() +" @ " +velocityX +" " +velocityY);
+        return true;
+    }
 }

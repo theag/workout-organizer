@@ -20,6 +20,7 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
     public static final int BASE_VIEW = 0;
     public static final int DOING_VIEW = 1;
     public static final int EDIT_VIEW = 2;
+    public static final String CURRENT_INDEX = "current index";
 
     private Context context;
     private int viewChoice;

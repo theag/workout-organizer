@@ -114,6 +114,8 @@ public class WorkoutActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ViewWorkoutExerciseActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(Workout.EXERCISE_INDEX, index);
+        int current = ((WorkoutAdapter)((ListView)findViewById(R.id.listView)).getAdapter()).getCurrentExercise();
+        extras.putBoolean(WorkoutAdapter.CURRENT_INDEX, index == current);
         intent.putExtras(extras);
         startActivityForResult(intent, VIEW_REQUEST);
     }

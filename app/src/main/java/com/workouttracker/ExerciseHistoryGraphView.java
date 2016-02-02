@@ -23,6 +23,10 @@ import java.util.ArrayList;
 
 public class ExerciseHistoryGraphView extends View implements GestureDetector.OnGestureListener {
 
+    public interface FlingListener {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+    }
+
     private static final int FINGER_WIDTH = 100;
     private static final float DOT_RADIUS = 7;
 
@@ -31,6 +35,7 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
     private ArrayList<HistoryDot> dots;
     private HistoryDot clickedDot;
     private GestureDetector mDetector;
+    private FlingListener listener;
 
     public ExerciseHistoryGraphView(Context context) {
         super(context);
@@ -49,6 +54,11 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
         clickedDot = null;
         mDetector = new GestureDetector(getContext(), this);
         HistoryDot.clickRadius = FINGER_WIDTH/4*dpToPx;
+        listener = null;
+    }
+
+    public void setFlingListener(FlingListener listener) {
+        this.listener = listener;
     }
 
     public void setExercise(Exercise ex) {
@@ -391,6 +401,7 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
             }
         }
         invalidate();
+        System.out.println("got tap");
         return true;
     }
 
@@ -405,7 +416,12 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return false;
+        if(listener != null) {
+            System.out.println("history fling");
+            return listener.onFling(e1, e2, velocityX, velocityY);
+        } else {
+            return false;
+        }
     }
 
 }
