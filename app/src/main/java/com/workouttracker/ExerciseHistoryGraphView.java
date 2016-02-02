@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -20,9 +21,6 @@ import com.workouttracker.data.HistoryDot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-/**
- * Created by nbp184 on 2016/01/27.
- */
 public class ExerciseHistoryGraphView extends View implements GestureDetector.OnGestureListener {
 
     private static final int FINGER_WIDTH = 100;
@@ -221,14 +219,22 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
                 dot.setRepsBounds(new RectF(x - dotRadius, y - dotRadius, x + dotRadius, y + dotRadius));
                 canvas.drawOval(dot.getRepsBounds(), p);
                 dots.add(dot);
+                dot = null;
             }
+        }
+        Rect clip;
+        if(dot == null) {
+            dot = new HistoryDot(hists[visibleCount-1]);
         }
         //weight
         p.setColor(myGetColor(R.color.exercise_history_graph));
         y = topHeight - bottomMargin - yDiv*((float)hists[visibleCount-1].weight - (float)weightStart)/(float)weightDiv;
         if(ex.historyCount() > visibleCount) {
             y2 = topHeight - bottomMargin - yDiv*((float)ex.getHistory(visibleCount).weight - (float)weightStart)/(float)weightDiv;
+            clip = canvas.getClipBounds();
+            canvas.clipRect(0, 0, width - 1, topHeight - 1);
             canvas.drawLine(x, y, x - xSpace, y2, wideLine);
+            canvas.clipRect(clip, Region.Op.UNION);
         }
         if(hists[visibleCount-1].duringWorkout) {
             p.setColor(myGetColor(R.color.exercise_history_during_workout));
@@ -243,7 +249,10 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
         y = height - 1 - bottomMargin - yDiv*(hists[visibleCount-1].repetitions - repsStart)/repsDiv;
         if(ex.historyCount() > visibleCount) {
             y2 = height - 1 - bottomMargin - yDiv * (ex.getHistory(visibleCount).repetitions - repsStart) / repsDiv;
+            clip = canvas.getClipBounds();
+            canvas.clipRect(0, topHeight + div, width - 1, height - 1);
             canvas.drawLine(x, y, x - xSpace, y2, wideLine);
+            canvas.clipRect(clip, Region.Op.UNION);
         }
         if(hists[visibleCount-1].duringWorkout) {
             p.setColor(myGetColor(R.color.exercise_history_during_workout));
@@ -267,9 +276,11 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
             if(clickedDot.inWeight) {
                 info = clickedDot.eh.weight +" lbs";
                 box = new RectF(clickedDot.getWeightBounds());
+                clip = new Rect(0, 0, width - 1, (int)topHeight - 1);
             } else {
                 info = clickedDot.eh.repetitions +" reps";
                 box = new RectF(clickedDot.getRepsBounds());
+                clip = new Rect(0, (int)(topHeight + div), width - 1, height - 1);
             }
             float boxWidth = Math.max(p.measureText(date), p.measureText(info)) + 10*dpToPx;
             float boxHeight = -2*fm.ascent +fm.descent + 10*dpToPx;
@@ -277,8 +288,6 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
             float topY = box.top;
             box.set(box.left + (box.right - box.left - boxWidth)/2, box.top - dotRadius - boxHeight, box.left + (box.right - box.left - boxWidth)/2 + boxWidth, box.top - dotRadius);
             float[][] triangle = {{centerX, topY}, {centerX + dotRadius, topY - dotRadius}, {centerX - dotRadius, topY - dotRadius}, {centerX, topY}};
-            Rect clip = canvas.getClipBounds();
-            canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight());
             //check right
             while(box.right > clip.right) {
                 box.right -= 1;
@@ -295,14 +304,12 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
                     break;
                 }
             }
-            if(box.top > clip.top) {
-                if((clickedDot.inWeight && topY + 3*dotRadius + box.height() <= topHeight) || (!clickedDot.inWeight && topY + 3*dotRadius + box.height() < height)) {
-                    box.set(box.left, topY + 3*dotRadius, box.right, topY + 3*dotRadius + box.height());
-                    triangle[0][1] += 2*dotRadius;
-                    triangle[1][1] += 4*dotRadius;
-                    triangle[2][1] += 4*dotRadius;
-                    triangle[3][1] += 2*dotRadius;
-                }
+            if(box.top < clip.top) {
+                box.set(box.left, topY + 3*dotRadius, box.right, topY + 3*dotRadius + box.height());
+                triangle[0][1] += 2*dotRadius;
+                triangle[1][1] += 4*dotRadius;
+                triangle[2][1] += 4*dotRadius;
+                triangle[3][1] += 2*dotRadius;
             }
             Path trianglePath = new Path();
             trianglePath.moveTo(triangle[0][0], triangle[0][1]);
@@ -331,19 +338,17 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
     }
 
     private float[] getRectOutline(float x1, float y1, float x2, float y2) {
-        float[] rv = {x1, y1, x2, y1,
+        return new float[]{x1, y1, x2, y1,
                       x2, y1, x2, y2,
                       x2, y2, x1, y2,
                       x1, y2, x1, y1};
-        return rv;
     }
 
     private float[] getRectOutline(RectF rect) {
-        float[] rv = {rect.left, rect.top, rect.right, rect.top,
+        return new float[]{rect.left, rect.top, rect.right, rect.top,
                 rect.right, rect.top, rect.right, rect.bottom,
                 rect.right, rect.bottom, rect.left, rect.bottom,
                 rect.left, rect.bottom, rect.left, rect.top};
-        return rv;
     }
 
     private int myGetColor(int resID) {
