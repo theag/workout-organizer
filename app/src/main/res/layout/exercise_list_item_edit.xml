@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <!--<ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_swap_vert_24dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/list_item_move_btn"
+        />-->
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/triangle_up_24dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/list_item_move_up_btn"
+        android:onClick="moveExerciseUp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/triangle_down_24dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/list_item_move_down_btn"
+        android:onClick="moveExerciseDown"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:text="Exercise 1"
+        android:id="@+id/list_item_name"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:onClick="editExercise"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="25"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/list_item_weight"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="2.5"
+        android:id="@+id/list_item_repetitions"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_close_24dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/list_item_delete_btn"
+        android:onClick="deleteExercise"/>
+
+</LinearLayout>

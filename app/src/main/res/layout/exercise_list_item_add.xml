@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_add_box_36dp"
+        android:text="@string/action_add_item"
+        android:background="@android:color/transparent"
+        android:textAlignment="textStart"
+        android:layout_gravity="start"
+        android:onClick="addExercise"/>
+
+</LinearLayout>

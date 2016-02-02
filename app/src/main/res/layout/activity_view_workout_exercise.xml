@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ViewWorkoutExerciseActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_toolbar"
+        android:text="Exercise 1"
+        android:id="@+id/list_item_name" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/list_item_name"
+        android:padding="5dp"
+        android:id="@+id/exercise_item">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_navigate_before_36dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/list_item_weight_down_btn"
+            android:onClick="weightDown"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="25"
+            android:id="@+id/list_item_weight"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/text_weight_unit"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_navigate_next_36dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/list_item_weight_up_btn"
+            android:onClick="weightUp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_navigate_before_36dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/list_item_reps_down_btn"
+            android:onClick="repsDown"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="2.5"
+            android:id="@+id/list_item_repetitions"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/text_repetitions_unit"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_navigate_next_36dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/list_item_reps_up_btn"
+            android:onClick="repsUp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exercise_item"
+        android:id="@+id/exercise_description"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exercise_description"
+        android:id="@+id/switch_graph_table"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_history_graph"
+            android:id="@+id/history_graph_button"
+            android:checked="true"
+            android:onClick="switchHistoryView"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_history_table"
+            android:id="@+id/history_table_button"
+            android:onClick="switchHistoryView"/>
+
+    </RadioGroup>
+
+    <com.workouttracker.ExerciseHistoryGraphView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image_history"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:layout_below="@+id/switch_graph_table" />
+
+    <!--<ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/switch_graph_table"
+        android:id="@+id/list_history"
+        android:visibility="gone"/>-->
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/switch_graph_table"
+        android:id="@+id/list_history"
+        android:visibility="gone"
+        android:stretchColumns="1">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="@string/text_date"
+                android:textStyle="bold"
+                android:padding="3dp"
+                android:layout_column="1"/>
+
+            <TextView
+                android:text="@string/text_weight"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:padding="3dp"/>
+
+            <TextView
+                android:text="@string/text_repetitions"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:padding="3dp"/>
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>
