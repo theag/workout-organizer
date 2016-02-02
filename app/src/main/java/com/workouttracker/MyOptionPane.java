@@ -24,9 +24,11 @@ public class MyOptionPane extends DialogFragment {
     private static final String MESSAGE_KEY = "message";
     private static final String TITLE_KEY = "title";
     private static final String TYPE_KEY = "type";
+    private static final String OPTIONS_KEY = "options";
 
     private static final int MESSAGE_DIALOG = 0;
     private static final int CONFIRM_DIALOG = 1;
+    private static final int OPTION_DIALOG = 2;
 
     public static void showMessageDialog(FragmentManager fragmentManager, String tag, String message) {
         DialogFragment frag = new MyOptionPane();
@@ -62,6 +64,16 @@ public class MyOptionPane extends DialogFragment {
         args.putInt(TYPE_KEY, CONFIRM_DIALOG);
         args.putCharSequence(MESSAGE_KEY, message);
         args.putCharSequence(TITLE_KEY, title);
+        frag.setArguments(args);
+        frag.show(fragmentManager, tag);
+    }
+
+    public static void showOptionDialog(FragmentManager fragmentManager, String tag, String title, String[] options) {
+        DialogFragment frag = new MyOptionPane();
+        Bundle args = new Bundle();
+        args.putInt(TYPE_KEY, OPTION_DIALOG);
+        args.putCharSequence(TITLE_KEY, title);
+        args.putStringArray(OPTIONS_KEY, options);
         frag.setArguments(args);
         frag.show(fragmentManager, tag);
     }
@@ -102,6 +114,15 @@ public class MyOptionPane extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 listener.onMyOptionPaneClick(getTag(), NO_OPTION);
+                            }
+                        });
+                break;
+            case OPTION_DIALOG:
+                builder.setTitle(args.getCharSequence(TITLE_KEY, "Options"))
+                        .setItems(args.getStringArray(OPTIONS_KEY), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                listener.onMyOptionPaneClick(getTag(), which);
                             }
                         });
                 break;

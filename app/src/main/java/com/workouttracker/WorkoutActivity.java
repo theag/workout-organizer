@@ -62,7 +62,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     public void weightDown(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent();
+        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
         int index = getViewIndex(parent);
         if(index < 0) {
             return;
@@ -73,7 +73,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     public void weightUp(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent();
+        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
         int index = getViewIndex(parent);
         if(index < 0) {
             return;
@@ -84,7 +84,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     public void repsDown(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent();
+        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
         int index = getViewIndex(parent);
         if(index < 0) {
             return;
@@ -95,7 +95,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     public void repsUp(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent();
+        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
         int index = getViewIndex(parent);
         if(index < 0) {
             return;
@@ -107,6 +107,9 @@ public class WorkoutActivity extends AppCompatActivity {
 
     public void viewExercise(View view) {
         ViewGroup parent = (ViewGroup)view.getParent();
+        if(view.getId() == R.id.list_item_name) {
+            parent = (ViewGroup)parent.getParent();
+        }
         int index = getViewIndex(parent);
         if(index < 0) {
             return;

@@ -1,11 +1,16 @@
 package com.workouttracker.data;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.workouttracker.AddExerciseDialog;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -23,6 +28,11 @@ public class Exercise implements Iterable<ExerciseHistory> {
     public static Exercise load(BufferedReader inFile) throws IOException {
         Exercise rv = new Exercise(inFile.readLine());
         rv.description = inFile.readLine().replaceAll(nlSub, "\n");
+        String filename = inFile.readLine();
+        if(filename.compareTo(nlSub) != 0) {
+            rv.image = BitmapFactory.decodeFile(filename);
+            rv.imageFilename = filename;
+        }
         rv.weight = Double.parseDouble(inFile.readLine());
         rv.weightJump = Double.parseDouble(inFile.readLine());
         rv.repetitions = Integer.parseInt(inFile.readLine());
@@ -41,6 +51,8 @@ public class Exercise implements Iterable<ExerciseHistory> {
     public double weightJump;
     public int repetitions;
     public int repetitionJump;
+    public Bitmap image;
+    public String imageFilename;
     private ArrayList<ExerciseHistory> history;
 
     public Exercise(String name) {
@@ -50,6 +62,8 @@ public class Exercise implements Iterable<ExerciseHistory> {
         weightJump = 1;
         repetitions = 0;
         repetitionJump = 1;
+        image = null;
+        imageFilename = null;
         history = new ArrayList<>();
     }
 
@@ -60,6 +74,8 @@ public class Exercise implements Iterable<ExerciseHistory> {
         weightJump = bundle.getDouble(AddExerciseDialog.WEIGHT_JUMP);
         repetitions = bundle.getInt(AddExerciseDialog.REPETITIONS);
         repetitionJump = bundle.getInt(AddExerciseDialog.REPETITIONS_JUMP);
+        image = null;
+        imageFilename = null;
         history = new ArrayList<>();
     }
 
@@ -83,6 +99,29 @@ public class Exercise implements Iterable<ExerciseHistory> {
     public void save(PrintWriter outFile) {
         outFile.println(name);
         outFile.println(description.replaceAll("\n", nlSub));
+        if(image != null) {
+            File file = new File(imageFilename);
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.close();
+                outFile.println(imageFilename);
+            } catch (IOException e) {
+                e.printStackTrace();
+                outFile.println(nlSub);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+        } else {
+            outFile.println(nlSub);
+            if(imageFilename != null) {
+                File file = new File(imageFilename);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+        }
         outFile.println(weight);
         outFile.println(weightJump);
         outFile.println(repetitions);

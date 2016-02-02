@@ -1,11 +1,13 @@
 package com.workouttracker.data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by nbp184 on 2016/01/22.
@@ -77,18 +79,6 @@ public class Workout implements Iterable<Exercise> {
         used = null;
     }
 
-    public Exercise addNewExerciseTop(String name) {
-        Exercise rv = new Exercise(name);
-        exercises.add(0, rv);
-        return rv;
-    }
-
-    public Exercise addNewExerciseBottom(String name) {
-        Exercise rv = new Exercise(name);
-        exercises.add(rv);
-        return rv;
-    }
-
     public Exercise removeExercise(int index) {
         return exercises.remove(index);
     }
@@ -97,7 +87,7 @@ public class Workout implements Iterable<Exercise> {
         exercises.add(index, ex);
     }
 
-    public void save(PrintWriter outFile) {
+    public void save(PrintWriter outFile, File fileDir) {
         outFile.println(name);
         outFile.println(creation.getTimeInMillis());
         if(viewed == null) {
@@ -110,7 +100,17 @@ public class Workout implements Iterable<Exercise> {
         } else {
             outFile.println(used.getTimeInMillis());
         }
+        Random rand = new Random();
         for(Exercise ex : exercises) {
+            if(ex.image != null && ex.imageFilename == null) {
+                int value = rand.nextInt();
+                File imageFile = new File(fileDir, "workout-" +key +"_image-" +value +".jpg");
+                while(imageFile.exists()) {
+                    value++;
+                    imageFile = new File(fileDir, "workout-" +key +"_image-" +value +".jpg");
+                }
+                ex.imageFilename = imageFile.getAbsolutePath();
+            }
             outFile.println();
             ex.save(outFile);
         }
@@ -155,5 +155,11 @@ public class Workout implements Iterable<Exercise> {
     @Override
     public Iterator<Exercise> iterator() {
         return exercises.iterator();
+    }
+
+    public Exercise addNewExerciseBottom(String name) {
+        Exercise ex = new Exercise(name);
+        exercises.add(ex);
+        return ex;
     }
 }

@@ -2,91 +2,109 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
 
-    <TextView
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="Exercise 1"
-        android:id="@+id/list_item_name"
-        android:layout_weight="1"
-        android:clickable="true"
-        android:onClick="viewExercise"/>
+        android:orientation="horizontal">
 
-    <GridLayout
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Exercise 1"
+            android:id="@+id/list_item_name"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="viewExercise"/>
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="4"
+            android:rowCount="2">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_navigate_before_24dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/list_item_weight_down_btn"
+                android:onClick="weightDown"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="2.5"
+                android:id="@+id/list_item_weight"
+                android:inputType="numberDecimal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/text_weight_unit"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_navigate_next_24dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/list_item_weight_up_btn"
+                android:onClick="weightUp"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_navigate_before_24dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/list_item_reps_down_btn"
+                android:onClick="repsDown"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="25"
+                android:id="@+id/list_item_repetitions"
+                android:inputType="number"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/text_repetitions_unit"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_navigate_next_24dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/list_item_reps_up_btn"
+                android:onClick="repsUp"/>
+
+        </GridLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/list_item_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:rowCount="2">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_navigate_before_24dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/list_item_weight_down_btn"
-            android:onClick="weightDown"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="2.5"
-            android:id="@+id/list_item_weight"
-            android:inputType="numberDecimal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/text_weight_unit"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_navigate_next_24dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/list_item_weight_up_btn"
-            android:onClick="weightUp"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_navigate_before_24dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/list_item_reps_down_btn"
-            android:onClick="repsDown"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="25"
-            android:id="@+id/list_item_repetitions"
-            android:inputType="number"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/text_repetitions_unit"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_navigate_next_24dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/list_item_reps_up_btn"
-            android:onClick="repsUp"/>
-
-    </GridLayout>
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:paddingBottom="5dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:onClick="viewExercise"/>
 
 
 </LinearLayout>

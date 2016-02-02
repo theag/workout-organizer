@@ -60,7 +60,7 @@ public class WorkoutList {
                 instance = load();
                 try {
                     PrintWriter outFile = new PrintWriter(new File(context.getFilesDir(), "workout0.wrk"));
-                    instance.getWorkout(0).save(outFile);
+                    instance.getWorkout(0).save(outFile, context.getFilesDir());
                     outFile.close();
                 } catch (FileNotFoundException e2) {
                     e2.printStackTrace();
@@ -151,6 +151,12 @@ public class WorkoutList {
         ArrayList<String> arr = new ArrayList<>(trash.size());
         for(Workout w : trash) {
             arr.add("workout" +w.key +".wrk");
+            for(Exercise ex : w) {
+                if(ex.imageFilename != null) {
+                    int index = ex.imageFilename.lastIndexOf(File.pathSeparatorChar);
+                    arr.add(ex.imageFilename.substring(index+1));
+                }
+            }
         }
         String[] rv = new String[arr.size()];
         arr.toArray(rv);

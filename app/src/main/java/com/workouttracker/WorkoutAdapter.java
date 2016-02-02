@@ -1,12 +1,14 @@
 package com.workouttracker;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -115,6 +117,15 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
 
             TextView reps = (TextView) view.findViewById(R.id.list_item_repetitions);
             reps.setText(WorkoutList.current.getExercise(position).repetitions+" " +context.getString(R.string.text_repetitions_unit));
+
+            ImageView iv = (ImageView) view.findViewById(R.id.list_item_image);
+            if(WorkoutList.current.getExercise(position).image != null) {
+                iv.setImageDrawable(new BitmapDrawable(context.getResources(), WorkoutList.current.getExercise(position).image));
+                iv.setVisibility(View.VISIBLE);
+            } else {
+                iv.setImageDrawable(null);
+                iv.setVisibility(View.GONE);
+            }
         } else if(viewChoice == DOING_VIEW) {
             TextView name = (TextView) view.findViewById(R.id.list_item_name);
             name.setText(WorkoutList.current.getExercise(position).name);
@@ -124,6 +135,15 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
 
             TextView reps = (TextView) view.findViewById(R.id.list_item_repetitions);
             reps.setText(""+WorkoutList.current.getExercise(position).repetitions);
+
+            ImageView iv = (ImageView) view.findViewById(R.id.list_item_image);
+            if(WorkoutList.current.getExercise(position).image != null) {
+                iv.setImageDrawable(new BitmapDrawable(context.getResources(), WorkoutList.current.getExercise(position).image));
+                iv.setVisibility(View.VISIBLE);
+            } else {
+                iv.setImageDrawable(null);
+                iv.setVisibility(View.GONE);
+            }
 
             if(position == currentExercise) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

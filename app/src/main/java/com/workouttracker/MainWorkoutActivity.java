@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -36,6 +37,7 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
         if(WorkoutList.current.unloaded) {
             try {
                 WorkoutList.current = Workout.load(new BufferedReader(new FileReader(new File(getFilesDir(), "workout" +WorkoutList.current.key + ".wrk"))), WorkoutList.current.key);
+                cleanOutImageFiles();
             } catch (IOException e) {
                 e.printStackTrace();
                 setResult(RESULT_CANCELED);
@@ -48,6 +50,18 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
         lv.setAdapter(adapter);
         getSupportActionBar().setTitle(WorkoutList.current.name);
         WorkoutList.current.setViewed();
+    }
+
+    private void cleanOutImageFiles() {
+        File[] imageFiles = getFilesDir().listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return filename.endsWith(".jpg") && filename.startsWith("workout-" +WorkoutList.current.key +"_");
+            }
+        });
+        for(File file : imageFiles) {
+            file.delete();
+        }
     }
 
     @Override
@@ -113,8 +127,7 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
     }
 
     public void viewExercise(View view) {
-        LinearLayout parent = (LinearLayout)view.getParent();
-        int index = getViewIndex(parent);
+        int index = getViewIndex(view);
         Intent intent = new Intent(this, ViewExerciseActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(Workout.EXERCISE_INDEX, index);
@@ -127,7 +140,7 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
         if(WorkoutList.current != null) {
             try {
                 PrintWriter outFile = new PrintWriter(new File(getFilesDir(), "workout" +WorkoutList.current.key + ".wrk"));
-                WorkoutList.current.save(outFile);
+                WorkoutList.current.save(outFile, getFilesDir());
                 outFile.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
