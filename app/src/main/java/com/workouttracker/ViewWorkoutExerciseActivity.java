@@ -25,6 +25,9 @@ import java.text.SimpleDateFormat;
 
 public class ViewWorkoutExerciseActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, ExerciseHistoryGraphView.FlingListener {
 
+    public static final int RESULT_SWIPE_LEFT = RESULT_FIRST_USER;
+    public static final int RESULT_SWIPE_RIGHT = RESULT_FIRST_USER + 1;
+
     private int index;
     private boolean isCurrent;
     private GestureDetector mDetector;
@@ -183,7 +186,27 @@ public class ViewWorkoutExerciseActivity extends AppCompatActivity implements Ge
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        System.out.println(e1.getX() +" " +e1.getY() +" -> " +e2.getX() +" " +e2.getY() +" @ " +velocityX +" " +velocityY);
-        return true;
+        if(isCurrent) {
+            //Defining Sensitivity
+            float sensitivity = 50;
+            //Swipe Left Check
+            if (e1.getX() - e2.getX() > sensitivity) {
+                //Setting Image Resource to Left_Arrow on Swipe Left
+                setResult(RESULT_SWIPE_LEFT);
+                finish();
+                return true;
+            }
+            //Swipe Right Check
+            else if (e2.getX() - e1.getX() > sensitivity) {
+                //Setting Image Resource to Right_Arrow on Swipe Right
+                setResult(RESULT_SWIPE_RIGHT);
+                finish();
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

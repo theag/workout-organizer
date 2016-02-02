@@ -129,11 +129,40 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            if(requestCode == VIEW_REQUEST) {
+        //TODO: check both of the current swipes to be sure not at beginning or end
+        if (requestCode == VIEW_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 ListView lv = (ListView) findViewById(R.id.listView);
                 WorkoutAdapter wa = (WorkoutAdapter) lv.getAdapter();
                 wa.notifyDataSetChanged();
+            } else if(resultCode == ViewWorkoutExerciseActivity.RESULT_SWIPE_LEFT) {
+                ListView lv = (ListView) findViewById(R.id.listView);
+                WorkoutAdapter adapter = (WorkoutAdapter) lv.getAdapter();
+                adapter.setCurrentExercise(adapter.getCurrentExercise()+1);
+                findViewById(R.id.prev_exercise_button).setEnabled(true);
+                if(adapter.getCurrentExercise() == adapter.getCount()-1) {
+                    findViewById(R.id.next_exercise_button).setEnabled(false);
+                }
+                Intent intent = new Intent(this, ViewWorkoutExerciseActivity.class);
+                Bundle extras = new Bundle();
+                extras.putInt(Workout.EXERCISE_INDEX, adapter.getCurrentExercise());
+                extras.putBoolean(WorkoutAdapter.CURRENT_INDEX, true);
+                intent.putExtras(extras);
+                startActivityForResult(intent, VIEW_REQUEST);
+            } else if(resultCode == ViewWorkoutExerciseActivity.RESULT_SWIPE_RIGHT) {
+                ListView lv = (ListView) findViewById(R.id.listView);
+                WorkoutAdapter adapter = (WorkoutAdapter) lv.getAdapter();
+                adapter.setCurrentExercise(adapter.getCurrentExercise()-1);
+                findViewById(R.id.next_exercise_button).setEnabled(true);
+                if(adapter.getCurrentExercise() == 0) {
+                    findViewById(R.id.prev_exercise_button).setEnabled(false);
+                }
+                Intent intent = new Intent(this, ViewWorkoutExerciseActivity.class);
+                Bundle extras = new Bundle();
+                extras.putInt(Workout.EXERCISE_INDEX, adapter.getCurrentExercise());
+                extras.putBoolean(WorkoutAdapter.CURRENT_INDEX, true);
+                intent.putExtras(extras);
+                startActivityForResult(intent, VIEW_REQUEST);
             }
         }
     }
