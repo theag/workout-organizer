@@ -21,6 +21,9 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
     public static final int DOING_VIEW = 1;
     public static final int EDIT_VIEW = 2;
 
+    public static final int TOP_BUTTON = -1;
+    public static final int BOTTOM_BUTTON = -2;
+
     private Context context;
     private int viewChoice;
     private int currentExercise;
@@ -91,7 +94,7 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
 
         if(viewChoice == EDIT_VIEW && position != 0 && position != WorkoutList.current.exerciseCount()+1) {
             TextView name = (TextView) view.findViewById(R.id.list_item_name);
-            name.setText(WorkoutList.current.getExercise(position-1).name);
+            name.setText(WorkoutList.current.getExercise(position - 1).name);
 
             TextView tv = (TextView) view.findViewById(R.id.list_item_weight);
             tv.setText("" + WorkoutList.current.getExercise(position - 1).weight);
@@ -99,12 +102,22 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
             tv = (TextView) view.findViewById(R.id.list_item_repetitions);
             tv.setText("" + WorkoutList.current.getExercise(position - 1).repetitions);
 
-            if(position == 1) {
-                ImageButton ib = (ImageButton)view.findViewById(R.id.list_item_move_up_btn);
+            tv = (TextView) view.findViewById(R.id.list_item_position);
+            tv.setText("" + (position - 1));
+
+            if (position == 1) {
+                ImageButton ib = (ImageButton) view.findViewById(R.id.list_item_move_up_btn);
                 ib.setEnabled(false);
-            } else if(position == WorkoutList.current.exerciseCount()) {
-                ImageButton ib = (ImageButton)view.findViewById(R.id.list_item_move_down_btn);
+            } else if (position == WorkoutList.current.exerciseCount()) {
+                ImageButton ib = (ImageButton) view.findViewById(R.id.list_item_move_down_btn);
                 ib.setEnabled(false);
+            }
+        } else if(viewChoice == EDIT_VIEW) {
+            TextView tv = (TextView) view.findViewById(R.id.list_item_position);
+            if(position == 0) {
+                tv.setText("" + TOP_BUTTON);
+            } else {
+                tv.setText("" + BOTTOM_BUTTON);
             }
         } else if(viewChoice == BASE_VIEW) {
             TextView name = (TextView) view.findViewById(R.id.list_item_name);
@@ -115,6 +128,9 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
 
             TextView reps = (TextView) view.findViewById(R.id.list_item_repetitions);
             reps.setText(WorkoutList.current.getExercise(position).repetitions+" " +context.getString(R.string.text_repetitions_unit));
+
+            TextView pos = (TextView) view.findViewById(R.id.list_item_position);
+            pos.setText("" + position);
         } else if(viewChoice == DOING_VIEW) {
             TextView name = (TextView) view.findViewById(R.id.list_item_name);
             name.setText(WorkoutList.current.getExercise(position).name);
@@ -124,6 +140,9 @@ public class WorkoutAdapter extends BaseAdapter implements ListAdapter {
 
             TextView reps = (TextView) view.findViewById(R.id.list_item_repetitions);
             reps.setText(""+WorkoutList.current.getExercise(position).repetitions);
+
+            TextView pos = (TextView) view.findViewById(R.id.list_item_position);
+            pos.setText("" + position);
 
             if(position == currentExercise) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
