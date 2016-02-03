@@ -105,7 +105,8 @@ public class ViewWorkoutExerciseActivity extends AppCompatActivity implements Ge
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_OK);
+        getIntent().putExtra(Workout.EXERCISE_INDEX, index);
+        setResult(RESULT_OK, getIntent());
         finish();
     }
 
@@ -191,14 +192,12 @@ public class ViewWorkoutExerciseActivity extends AppCompatActivity implements Ge
             float sensitivity = 50;
             //Swipe Left Check
             if (e1.getX() - e2.getX() > sensitivity) {
-                //Setting Image Resource to Left_Arrow on Swipe Left
                 setResult(RESULT_SWIPE_LEFT);
                 finish();
                 return true;
             }
             //Swipe Right Check
             else if (e2.getX() - e1.getX() > sensitivity) {
-                //Setting Image Resource to Right_Arrow on Swipe Right
                 setResult(RESULT_SWIPE_RIGHT);
                 finish();
                 return true;
