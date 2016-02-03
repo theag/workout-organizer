@@ -417,7 +417,6 @@ public class ExerciseHistoryGraphView extends View implements GestureDetector.On
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         if(listener != null) {
-            System.out.println("history fling");
             return listener.onFling(e1, e2, velocityX, velocityY);
         } else {
             return false;
