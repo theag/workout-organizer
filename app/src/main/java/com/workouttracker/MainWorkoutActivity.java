@@ -7,8 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.workouttracker.data.Workout;
 import com.workouttracker.data.WorkoutList;
@@ -116,18 +118,17 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
         finish();
     }
 
-    public int getViewIndex(View view) {
-        ListView lv = (ListView)findViewById(R.id.listView);
-        for(int i = 0; i < lv.getChildCount(); i++) {
-            if(lv.getChildAt(i) == view) {
-                return i;
-            }
+    public ViewGroup listItemParent(View view) {
+        ViewGroup vg = (ViewGroup)view.getParent();
+        while(vg.getId() != R.id.list_item_parent) {
+            vg = (ViewGroup)vg.getParent();
         }
-        return -1;
+        return vg;
     }
 
     public void viewExercise(View view) {
-        int index = getViewIndex(view);
+        TextView position = (TextView)listItemParent(view).findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         Intent intent = new Intent(this, ViewExerciseActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(Workout.EXERCISE_INDEX, index);

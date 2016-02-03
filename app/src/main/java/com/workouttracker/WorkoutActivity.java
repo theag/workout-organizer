@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.workouttracker.data.Workout;
 import com.workouttracker.data.WorkoutList;
@@ -27,16 +28,6 @@ public class WorkoutActivity extends AppCompatActivity {
         WorkoutAdapter adapter = new WorkoutAdapter(WorkoutAdapter.DOING_VIEW, this);
         ListView lv = (ListView)findViewById(R.id.listView);
         lv.setAdapter(adapter);
-    }
-
-    public int getViewIndex(View view) {
-        ListView lv = (ListView)findViewById(R.id.listView);
-        for(int i = 0; i < lv.getChildCount(); i++) {
-            if(lv.getChildAt(i) == view) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     public void shiftCurrentExercise(View view) {
@@ -61,59 +52,54 @@ public class WorkoutActivity extends AppCompatActivity {
         lv.setSelection(adapter.getCurrentExercise());
     }
 
-    public void weightDown(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
-        int index = getViewIndex(parent);
-        if(index < 0) {
-            return;
+    public ViewGroup listItemParent(View view) {
+        ViewGroup vg = (ViewGroup)view.getParent();
+        while(vg.getId() != R.id.list_item_parent) {
+            vg = (ViewGroup)vg.getParent();
         }
+        return vg;
+    }
+
+    public void weightDown(View view) {
+        ViewGroup parent = listItemParent(view);
+        TextView position = (TextView)parent.findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         double weight = WorkoutList.current.getExercise(index).weightDown();
         EditText et = (EditText)parent.findViewById(R.id.list_item_weight);
         et.setText(""+weight);
     }
 
     public void weightUp(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
-        int index = getViewIndex(parent);
-        if(index < 0) {
-            return;
-        }
+        ViewGroup parent = listItemParent(view);
+        TextView position = (TextView)parent.findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         double weight = WorkoutList.current.getExercise(index).weightUp();
         EditText et = (EditText)parent.findViewById(R.id.list_item_weight);
         et.setText(""+weight);
     }
 
     public void repsDown(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
-        int index = getViewIndex(parent);
-        if(index < 0) {
-            return;
-        }
+        ViewGroup parent = listItemParent(view);
+        TextView position = (TextView)parent.findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         int reps = WorkoutList.current.getExercise(index).repsDown();
         EditText et = (EditText)parent.findViewById(R.id.list_item_repetitions);
         et.setText(""+reps);
     }
 
     public void repsUp(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent().getParent().getParent();
-        int index = getViewIndex(parent);
-        if(index < 0) {
-            return;
-        }
+        ViewGroup parent = listItemParent(view);
+        TextView position = (TextView)parent.findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         int reps = WorkoutList.current.getExercise(index).repsUp();
         EditText et = (EditText)parent.findViewById(R.id.list_item_repetitions);
         et.setText(""+reps);
     }
 
     public void viewExercise(View view) {
-        ViewGroup parent = (ViewGroup)view.getParent();
-        if(view.getId() == R.id.list_item_name) {
-            parent = (ViewGroup)parent.getParent();
-        }
-        int index = getViewIndex(parent);
-        if(index < 0) {
-            return;
-        }
+        ViewGroup parent = listItemParent(view);
+        TextView position = (TextView)parent.findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         Intent intent = new Intent(this, ViewWorkoutExerciseActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(Workout.EXERCISE_INDEX, index);

@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.workouttracker.data.Exercise;
 import com.workouttracker.data.Workout;
@@ -48,10 +50,17 @@ public class EditActivity extends AppCompatActivity implements AddExerciseDialog
         finish();
     }
 
+    public ViewGroup listItemParent(View view) {
+        ViewGroup vg = (ViewGroup)view.getParent();
+        while(vg.getId() != R.id.list_item_parent) {
+            vg = (ViewGroup)vg.getParent();
+        }
+        return vg;
+    }
+
     public void editExercise(View view) {
-        LinearLayout parent = (LinearLayout)view.getParent();
-        int index = getViewIndex(parent) - 1;
-        if(index < 0) return;
+        TextView position = (TextView)listItemParent(view).findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
         Intent intent = new Intent(this, EditExerciseActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(Workout.EXERCISE_INDEX, index);
@@ -60,22 +69,22 @@ public class EditActivity extends AppCompatActivity implements AddExerciseDialog
     }
 
     public void addExercise(View view) {
-        LinearLayout parent = (LinearLayout)view.getParent();
-        int index = getViewIndex(parent);
-        AddExerciseDialog.showDialog(getSupportFragmentManager(), "add exercise", index == 0);
+        TextView position = (TextView)listItemParent(view).findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
+        AddExerciseDialog.showDialog(getSupportFragmentManager(), "add exercise", index == WorkoutAdapter.TOP_BUTTON);
     }
 
     private int savedIndex;
 
     public void deleteExercise(View view) {
-        LinearLayout parent = (LinearLayout)view.getParent();
-        savedIndex = getViewIndex(parent) - 1;
-        MyOptionPane.showConfirmDialog(getSupportFragmentManager(), DELETE_EXERCISE, "Are you sure you wish to delete exercise \"" +WorkoutList.current.getExercise(savedIndex).name +"\"?", "Confirm Delete");
+        TextView position = (TextView)listItemParent(view).findViewById(R.id.list_item_position);
+        savedIndex = Integer.parseInt(position.getText().toString());
+        MyOptionPane.showConfirmDialog(getSupportFragmentManager(), DELETE_EXERCISE, "Are you sure you wish to delete exercise \"" + WorkoutList.current.getExercise(savedIndex).name + "\"?", "Confirm Delete");
     }
 
     public void moveExerciseUp(View view) {
-        LinearLayout parent = (LinearLayout)view.getParent();
-        int index = getViewIndex(parent) - 1;
+        TextView position = (TextView)listItemParent(view).findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
 
         Exercise ex = WorkoutList.current.removeExercise(index);
         WorkoutList.current.placeExercise(ex, index-1);
@@ -86,8 +95,8 @@ public class EditActivity extends AppCompatActivity implements AddExerciseDialog
     }
 
     public void moveExerciseDown(View view) {
-        LinearLayout parent = (LinearLayout)view.getParent();
-        int index = getViewIndex(parent) - 1;
+        TextView position = (TextView)listItemParent(view).findViewById(R.id.list_item_position);
+        int index = Integer.parseInt(position.getText().toString());
 
         Exercise ex = WorkoutList.current.removeExercise(index);
         WorkoutList.current.placeExercise(ex, index+1);
@@ -95,16 +104,6 @@ public class EditActivity extends AppCompatActivity implements AddExerciseDialog
         ListView lv = (ListView)findViewById(R.id.listView);
         WorkoutAdapter wa = (WorkoutAdapter)lv.getAdapter();
         wa.notifyDataSetChanged();
-    }
-
-    private int getViewIndex(View view) {
-        ListView lv = (ListView)findViewById(R.id.listView);
-        for(int i = 0; i < lv.getChildCount(); i++) {
-            if(lv.getChildAt(i) == view) {
-                return i;
-            }
-        }
-        return -1;
     }
 
 
