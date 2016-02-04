@@ -1,6 +1,8 @@
 package com.workouttracker;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,7 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
     private static final int EDIT_REQUEST = 1;
     private static final int WORKOUT_REQUEST = 2;
     private static final String CONFIRM_DELETE = "confirm delete";
+    private static final int EXPORT_REQUEST = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,48 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
                 return true;
             case R.id.action_delete:
                 MyOptionPane.showConfirmDialog(getSupportFragmentManager(), CONFIRM_DELETE, "Are you sure you wish to delete this workout?", "Confirm Delete");
+                return true;
+            case R.id.action_share:
+                intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, WorkoutList.current.printWorkout());
+                intent.setType("text/plain");
+                // Always use string resources for UI text.
+                // This says something like "Share this photo with"
+                String title = "Share this workout with..";//getResources().getString(R.string.chooser_title);
+                // Create intent to show chooser
+                Intent chooser = Intent.createChooser(intent, title);
+
+                // Verify the intent will resolve to at least one activity
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(chooser);
+                } else {
+                    System.out.println("nope");
+                }
+                return true;
+            case R.id.action_export:
+                try {
+                    //TODO: XML!!!! better make some XML bitch
+                    File file = new File(getFilesDir(), "workout" +WorkoutList.current.key + ".wrk");
+                    PrintWriter outFile = new PrintWriter(file);
+                    WorkoutList.current.save(outFile);
+                    outFile.close();
+                    intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("application/xml");
+                    Uri fileUri = FileProvider.getUriForFile(this, "com.workouttracker.fileprovider", file);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                    title = "Share this workout with..";
+                    chooser = Intent.createChooser(intent, title);
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(chooser, EXPORT_REQUEST);
+                    } else {
+                        System.out.println("nope");
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    System.out.println("double nope");
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -96,6 +141,9 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
                 WorkoutAdapter wa = (WorkoutAdapter) lv.getAdapter();
                 wa.notifyDataSetChanged();
             }
+        } else if(requestCode == EXPORT_REQUEST) {
+            //File file = new File(getFilesDir(), "workout" +WorkoutList.current.key + ".txt");
+            //file.delete();
         }
     }
 

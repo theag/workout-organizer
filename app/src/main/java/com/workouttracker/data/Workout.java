@@ -156,4 +156,22 @@ public class Workout implements Iterable<Exercise> {
     public Iterator<Exercise> iterator() {
         return exercises.iterator();
     }
+
+    public String printWorkout() {
+        String rv = name +"\n";
+        for(int i = 0; i < name.length(); i++) {
+            rv += "=";
+        }
+        for(int i = 0; i < exercises.size(); i++) {
+            Exercise ex = exercises.get(i);
+            if(i > 0) {
+                rv += "\n";
+            }
+            rv += "\n" +ex.name +" " +ex.weight +" lbs " +ex.repetitions +" reps";
+            if(!ex.description.isEmpty()) {
+                rv += "\n\t" +ex.description;
+            }
+        }
+        return rv;
+    }
 }

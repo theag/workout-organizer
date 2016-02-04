@@ -8,10 +8,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
+
+        <activity
+            android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data android:name="android.app.default_searchable" android:value=".SearchActivity"/>
+        </activity>
+
         <activity
             android:name=".MainWorkoutActivity"
             android:parentActivityName=".MainActivity" />
+
         <activity android:name=".EditActivity" />
+
         <activity
             android:name=".WorkoutActivity"
             android:parentActivityName=".MainWorkoutActivity" />
@@ -24,14 +36,7 @@
         <activity
             android:name=".EditExerciseActivity"
             android:parentActivityName=".EditActivity" />
-        <activity
-            android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <meta-data android:name="android.app.default_searchable" android:value=".SearchActivity"/>
-        </activity>
+
         <activity android:name=".SearchActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -43,6 +48,17 @@
         <provider
             android:name=".SearchSuggestionProvider"
             android:authorities="com.workouttracker.SearchSuggestionProvider"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.workouttracker.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
 
     </application>
 
