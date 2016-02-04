@@ -105,6 +105,9 @@ public class MainWorkoutActivity extends AppCompatActivity implements MyOptionPa
     }
 
     public ViewGroup listItemParent(View view) {
+        if(view.getId() == R.id.list_item_parent) {
+            return (ViewGroup)view;
+        }
         ViewGroup vg = (ViewGroup)view.getParent();
         while(vg.getId() != R.id.list_item_parent) {
             vg = (ViewGroup)vg.getParent();
