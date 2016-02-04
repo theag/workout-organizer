@@ -1,6 +1,7 @@
 package com.workouttracker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,6 +23,8 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
 
     private static final int IMAGE_REQUEST = 1;
     private static final String IMAGE_CLICK = "image click";
+    private static final String IMAGE_CHOICE = "image choice";
+    private static final int CAMERA_REQUEST = 2;
 
     private int index;
 
@@ -97,7 +100,7 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
         if(alreadyHas) {
             MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CLICK, "Exercise Image", new String[]{"Change", "Clear"});
         } else {
-            openImage();
+            MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CHOICE, "Get image from", new String[]{"File", "Camera"});
         }
     }
 
@@ -116,6 +119,12 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
                     }
                 }
                 break;
+            case CAMERA_REQUEST:
+                if(resultCode == RESULT_OK) {
+                    ImageUploadButtonView iubv = (ImageUploadButtonView)findViewById(R.id.imageUpload);
+                    iubv.setImage((Bitmap)data.getExtras().get("data"));
+                }
+                break;
         }
     }
 
@@ -123,6 +132,11 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
         Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, IMAGE_REQUEST);
+    }
+
+    private void cameraImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA_REQUEST);
     }
 
     @Override
@@ -134,10 +148,16 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
     public void onMyOptionPaneClick(String tag, int result) {
         if(tag.compareTo(IMAGE_CLICK) == 0) {
             if(result == 0) {
-                openImage();
+                MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CHOICE, "Get image from", new String[]{"File", "Camera"});
             } else {
                 ImageUploadButtonView iubv = (ImageUploadButtonView)findViewById(R.id.imageUpload);
                 iubv.setImage(null);
+            }
+        } else if(tag.compareTo(IMAGE_CHOICE) == 0) {
+            if(result == 0) {
+                openImage();
+            } else {
+                cameraImage();
             }
         }
     }
