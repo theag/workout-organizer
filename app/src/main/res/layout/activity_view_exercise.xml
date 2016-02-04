@@ -58,10 +58,19 @@
         android:paddingRight="5dp"
         android:paddingLeft="5dp"/>
 
-    <RadioGroup
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/exercise_description"
+        android:id="@+id/exercise_image"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exercise_image"
         android:id="@+id/switch_graph_table"
         android:orientation="horizontal">
 
@@ -84,7 +93,7 @@
 
     <com.workouttracker.ExerciseHistoryGraphView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="1000dp"
         android:id="@+id/image_history"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"

@@ -2,8 +2,6 @@ package com.workouttracker.data;
 
 import android.graphics.RectF;
 
-import com.workouttracker.data.ExerciseHistory;
-
 /**
  * Created by nbp184 on 2016/01/27.
  */

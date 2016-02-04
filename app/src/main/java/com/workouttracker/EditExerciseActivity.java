@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.workouttracker.data.Exercise;
 import com.workouttracker.data.Workout;
@@ -19,7 +16,7 @@ import com.workouttracker.data.WorkoutList;
 
 import java.io.IOException;
 
-public class EditExerciseActivity extends AppCompatActivity implements ImageUploadButtonView.ImageUploadButtonListener, MyOptionPane.MyOptionPaneListener {
+public class EditExerciseActivity extends AppCompatActivity implements /*ImageUploadButtonView.ImageUploadButtonListener,*/ MyOptionPane.MyOptionPaneListener {
 
     private static final int IMAGE_REQUEST = 1;
     private static final String IMAGE_CLICK = "image click";
@@ -55,14 +52,15 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
         et.setText(""+ex.weightJump);
 
         et = (EditText)findViewById(R.id.exercise_repetitions);
-        et.setText(""+ex.repetitions);
+        et.setText("" + ex.repetitions);
 
         et = (EditText)findViewById(R.id.exercise_repetitions_jump);
         et.setText(""+ex.repetitionJump);
 
         ImageUploadButtonView iubv = (ImageUploadButtonView)findViewById(R.id.imageUpload);
-        iubv.setOnClickListener(this);
+        //iubv.setOnClickListener(this);
         iubv.setImage(ex.image);
+
     }
 
     @Override
@@ -88,6 +86,7 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
         ex.repetitionJump = Integer.parseInt(et.getText().toString());
         ex.makeHistory(false);
 
+        //TODO: // FIXME: 2016/02/04
         ImageUploadButtonView iubv = (ImageUploadButtonView)findViewById(R.id.imageUpload);
         ex.image = iubv.getImage();
 
@@ -95,15 +94,25 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
         finish();
     }
 
-    @Override
+    /*@Override
     public void onTap(boolean alreadyHas) {
         if(alreadyHas) {
             MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CLICK, "Exercise Image", new String[]{"Change", "Clear"});
         } else {
             MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CHOICE, "Get image from", new String[]{"File", "Camera"});
         }
+    }*/
+
+    public void imageButtonClick(View view) {
+        ImageUploadButtonView iubv = (ImageUploadButtonView)view;
+        if(iubv.getImage() == null) {
+            MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CHOICE, "Get image from", new String[]{"File", "Camera"});
+        } else {
+            MyOptionPane.showOptionDialog(getSupportFragmentManager(), IMAGE_CLICK, "Exercise Image", new String[]{"Change", "Clear"});
+        }
     }
 
+    //TODO: // FIXME: 2016/02/04
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -144,6 +153,7 @@ public class EditExerciseActivity extends AppCompatActivity implements ImageUplo
 
     }
 
+    //TODO: // FIXME: 2016/02/04
     @Override
     public void onMyOptionPaneClick(String tag, int result) {
         if(tag.compareTo(IMAGE_CLICK) == 0) {

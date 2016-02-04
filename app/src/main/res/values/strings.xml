@@ -35,4 +35,5 @@
     <string name="text_repetitions_unit">reps</string>
     <string name="next_exercise_button">Next Exercise</string>
     <string name="prev_exercise_button">Previous Exercise</string>
+    <string name="button_add_image">Tap Here to Add an Image</string>
 </resources>

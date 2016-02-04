@@ -99,10 +99,19 @@
         android:layout_below="@+id/exercise_item"
         android:id="@+id/exercise_description"/>
 
-    <RadioGroup
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/exercise_description"
+        android:id="@+id/exercise_image"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exercise_image"
         android:id="@+id/switch_graph_table"
         android:orientation="horizontal">
 

@@ -1,12 +1,13 @@
 package com.workouttracker;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -45,6 +46,12 @@ public class ViewExerciseActivity extends AppCompatActivity {
 
         tv = (TextView)findViewById(R.id.exercise_description);
         tv.setText(ex.description);
+
+        if(ex.image != null) {
+            ImageView iv = (ImageView)findViewById(R.id.exercise_image);
+            iv.setVisibility(View.VISIBLE);
+            iv.setImageDrawable(new BitmapDrawable(getResources(), ex.image));
+        }
         
         //ListView lv = (ListView)findViewById(R.id.list_history);
         //lv.setAdapter(new HistoryAdapter(this, ex));

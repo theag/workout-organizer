@@ -16,92 +16,100 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <EditText
+    <com.workouttracker.data.ScrollLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/exercise_name"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:hint="@string/hint_exercise_name"
-        android:inputType="textCapWords"/>
+        android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/exercise_description"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:hint="@string/hint_exercise_description"
-        android:inputType="textCapSentences|textMultiLine"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exercise_name"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:hint="@string/hint_exercise_name"
+            android:inputType="textCapWords"/>
 
-    <com.workouttracker.ImageUploadButtonView
-        android:id="@+id/imageUpload"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:padding="5dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exercise_description"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:hint="@string/hint_exercise_description"
+            android:inputType="textCapSentences|textMultiLine"/>
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp">
 
-        <TableRow>
+            <TableRow>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/exercise_weight"
-                android:inputType="numberDecimal"
-                android:hint="@string/action_weight"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/exercise_weight"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/action_weight"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_weight_unit"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_weight_unit"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/exercise_weight_jump"
-                android:inputType="numberDecimal"
-                android:hint="@string/action_weightJump" />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/exercise_weight_jump"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/action_weightJump" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_weight_unit"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_weight_unit"/>
 
-        </TableRow>
+            </TableRow>
 
-        <TableRow>
+            <TableRow>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/exercise_repetitions"
-                android:inputType="number"
-                android:hint="@string/action_repetitions"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/exercise_repetitions"
+                    android:inputType="number"
+                    android:hint="@string/action_repetitions"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_repetitions_unit"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_repetitions_unit"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/exercise_repetitions_jump"
-                android:inputType="number"
-                android:hint="@string/action_repetitionsJump"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/exercise_repetitions_jump"
+                    android:inputType="number"
+                    android:hint="@string/action_repetitionsJump"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_repetitions_unit"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_repetitions_unit"/>
 
-        </TableRow>
+            </TableRow>
 
-    </TableLayout>
+        </TableLayout>
+
+        <com.workouttracker.ImageUploadButtonView
+            android:id="@+id/imageUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"
+            android:onClick="imageButtonClick"/>
+
+    </com.workouttracker.data.ScrollLayout>
 
 </LinearLayout>
