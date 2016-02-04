@@ -35,4 +35,6 @@
     <string name="text_repetitions_unit">reps</string>
     <string name="next_exercise_button">Next Exercise</string>
     <string name="prev_exercise_button">Previous Exercise</string>
+    <string name="action_export">Export</string>
+    <string name="action_share">Share</string>
 </resources>
