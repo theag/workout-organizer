@@ -44,6 +44,7 @@ public class ImageUploadButtonView extends View {
     public void setImage(Bitmap image) {
         this.image = image;
         System.out.println("invalidate");
+        requestLayout();
         invalidate();
     }
 
@@ -53,6 +54,7 @@ public class ImageUploadButtonView extends View {
 
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        System.out.println("drawing");
         canvas.clipRect(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
         canvas.translate(getPaddingLeft(), getPaddingTop());
         int width = getWidth() - getPaddingLeft() - getPaddingRight();
@@ -79,7 +81,7 @@ public class ImageUploadButtonView extends View {
             String str = getResources().getString(R.string.button_add_image);
             p.getTextBounds(str, 0, str.length(), r);
             Paint.FontMetrics fm = p.getFontMetrics();
-            canvas.drawText(str, (width - r.width())/2f, (height - fm.ascent)/2f, p);
+            canvas.drawText(str, (width - r.width()) / 2f, (height - fm.ascent)/2f, p);
         } else {
             //TODO: fuss about scaling
             Paint p = new Paint(Paint.FILTER_BITMAP_FLAG);
@@ -89,6 +91,7 @@ public class ImageUploadButtonView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        System.out.println("measuring");
         int width = MeasureSpec.getSize(widthMeasureSpec);
         Paint p = new Paint();
         p.setTextSize(getResources().getDimensionPixelSize(R.dimen.button_font_size));
