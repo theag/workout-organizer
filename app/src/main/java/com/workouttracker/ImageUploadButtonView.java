@@ -2,6 +2,7 @@ package com.workouttracker;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -13,12 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.io.File;
+
 /**
  *
  */
 public class ImageUploadButtonView extends View {
 
     private Bitmap image;
+    private Bitmap tempImage;
     private float dpToPx;
 
     public ImageUploadButtonView(Context context) {
@@ -85,7 +89,9 @@ public class ImageUploadButtonView extends View {
         } else {
             //TODO: fuss about scaling
             Paint p = new Paint(Paint.FILTER_BITMAP_FLAG);
-            canvas.drawBitmap(image, null, canvas.getClipBounds(), p);
+            Rect r = canvas.getClipBounds();
+            canvas.drawBitmap(tempImage, null, canvas.getClipBounds(), p);
+            tempImage = null;
         }
     }
 
@@ -98,13 +104,16 @@ public class ImageUploadButtonView extends View {
         Rect r = new Rect();
         String str = getResources().getString(R.string.button_add_image);
         p.getTextBounds(str, 0, str.length(), r);
+        if(image != null && tempImage == null) {
+            tempImage = BitmapFactory.decodeFile((new File(getContext().getFilesDir(),"temp-image.jpg")).getAbsolutePath());
+        }
         switch(MeasureSpec.getMode(widthMeasureSpec)) {
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
                 if(image == null) {
                     width = Math.min(width, r.width() + 2*getPaddingLeft() + 2*getPaddingRight());
                 } else {
-                    width = Math.min(width, image.getScaledWidth(getResources().getDisplayMetrics()) + getPaddingRight() + getPaddingLeft());
+                    width = Math.min(width, tempImage.getScaledWidth(getResources().getDisplayMetrics()) + getPaddingRight() + getPaddingLeft());
                 }
                 break;
         }
@@ -115,7 +124,7 @@ public class ImageUploadButtonView extends View {
                 if(image == null) {
                     height = Math.min(height, r.height() + 2*getPaddingTop() + 2*getPaddingBottom());
                 } else {
-                    height = Math.min(height, image.getScaledHeight(getResources().getDisplayMetrics()) + getPaddingTop() + getPaddingBottom());
+                    height = Math.min(height, tempImage.getScaledHeight(getResources().getDisplayMetrics()) + getPaddingTop() + getPaddingBottom());
                 }
                 break;
         }

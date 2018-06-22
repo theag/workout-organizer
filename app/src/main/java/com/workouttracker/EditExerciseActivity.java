@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.workouttracker.data.Exercise;
 import com.workouttracker.data.Workout;
 import com.workouttracker.data.WorkoutList;
 
+import java.io.File;
 import java.io.IOException;
 
 public class EditExerciseActivity extends AppCompatActivity implements /*ImageUploadButtonView.ImageUploadButtonListener,*/ MyOptionPane.MyOptionPaneListener {
@@ -86,9 +88,9 @@ public class EditExerciseActivity extends AppCompatActivity implements /*ImageUp
         ex.repetitionJump = Integer.parseInt(et.getText().toString());
         ex.makeHistory(false);
 
-        //TODO: // FIXME: 2016/02/04
+        //TODO: Fix this by getting "temp-image.jpg", also need thumbnail? Yes.
         ImageUploadButtonView iubv = (ImageUploadButtonView)findViewById(R.id.imageUpload);
-        ex.image = iubv.getImage();
+        //ex.image = iubv.getImage();
 
         setResult(RESULT_OK);
         finish();
@@ -130,6 +132,7 @@ public class EditExerciseActivity extends AppCompatActivity implements /*ImageUp
                 break;
             case CAMERA_REQUEST:
                 if(resultCode == RESULT_OK) {
+                    //TODO: keep thumbnail but also open the file "temp-image.jpg", maybe delete this after close? also don't keep in RAM
                     ImageUploadButtonView iubv = (ImageUploadButtonView)findViewById(R.id.imageUpload);
                     iubv.setImage((Bitmap)data.getExtras().get("data"));
                 }
@@ -145,7 +148,11 @@ public class EditExerciseActivity extends AppCompatActivity implements /*ImageUp
 
     private void cameraImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA_REQUEST);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = new File(getFilesDir(),"temp-image.jpg");
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            startActivityForResult(intent, CAMERA_REQUEST);
+        }
     }
 
     @Override
@@ -154,6 +161,7 @@ public class EditExerciseActivity extends AppCompatActivity implements /*ImageUp
     }
 
     //TODO: // FIXME: 2016/02/04
+    //TODO: check for camera with hasSystemFeature(PackageManager.FEATURE_CAMERA)
     @Override
     public void onMyOptionPaneClick(String tag, int result) {
         if(tag.compareTo(IMAGE_CLICK) == 0) {
